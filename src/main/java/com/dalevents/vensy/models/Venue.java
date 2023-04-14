@@ -1,4 +1,4 @@
-package com.dalevents.vensy.entities;
+package com.dalevents.vensy.models;
 
 import java.util.List;
 import java.util.Set;
@@ -24,6 +24,7 @@ public class Venue {
     Long id;
     String name;
     String address;
+    String phoneNumber;
     int capacity;
     List<Service> services;
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)

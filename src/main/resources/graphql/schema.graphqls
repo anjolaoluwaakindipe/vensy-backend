@@ -1,0 +1,19 @@
+type Query {
+    getCompanyById(id: ID): Company
+}
+
+type Company {
+    id: ID
+    name: String
+    address: String
+    email: String
+    venues: [Venue]
+}
+
+type Venue {
+    id: ID
+    name: String
+    address: String
+    phoneNumber: String
+    capacity: Int
+}

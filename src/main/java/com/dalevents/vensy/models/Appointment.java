@@ -1,4 +1,4 @@
-package com.dalevents.vensy.entities;
+package com.dalevents.vensy.models;
 
 import java.util.Date;
 
