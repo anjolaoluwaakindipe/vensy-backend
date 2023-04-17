@@ -35,7 +35,7 @@ public class CompanyController {
 
     @PostMapping
     ResponseEntity<CreateCompanyResDto> createACompany(@Validated @RequestBody CreateCompanyReqDto body) {
-        CreateCompanyCommand params = companyMapping.creatCompanyDtoToCommand(body);
+        CreateCompanyCommand params = companyMapping.createCompanyDtoToCommand(body);
         var serviceResponse = companyService.createCompany(params);
         var response = companyMapping.createCommpanyResponseToDto(serviceResponse);
         return new ResponseEntity<CreateCompanyResDto>(response, HttpStatus.CREATED);

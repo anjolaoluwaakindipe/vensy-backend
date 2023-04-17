@@ -12,7 +12,7 @@ import com.dalevents.vensy.services.company.response.*;
 @Mapper(componentModel = "spring")
 public interface CompanyMapping {
 
-    CreateCompanyCommand creatCompanyDtoToCommand(CreateCompanyReqDto dto);
+    CreateCompanyCommand createCompanyDtoToCommand(CreateCompanyReqDto dto);
 
     CreateCompanyResDto createCommpanyResponseToDto(CreateCompanyResponse response);
 
