@@ -15,7 +15,10 @@ import com.dalevents.vensy.services.company.requests.CreateCompanyCommand;
 import com.dalevents.vensy.services.company.response.CreateCompanyResponse;
 import com.dalevents.vensy.services.company.response.GetCompanyResponse;
 
+import lombok.AllArgsConstructor;
+
 @Service
+@AllArgsConstructor
 public class CompanyServiceImpl implements CompanyService {
 
     @Autowired
@@ -43,7 +46,7 @@ public class CompanyServiceImpl implements CompanyService {
         }
 
         Company newCompany = Company.builder().email(command.email()).address(command.address()).name(command.name())
-                .phoneNumber(command.name()).build();
+                .phoneNumber(command.phoneNumber()).build();
 
         newCompany = companyRepository.save(newCompany);
 
