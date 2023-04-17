@@ -8,7 +8,9 @@ import org.springframework.stereotype.Service;
 
 import com.dalevents.vensy.common.AppError;
 import com.dalevents.vensy.models.Company;
+import com.dalevents.vensy.models.Venue;
 import com.dalevents.vensy.repositories.CompanyRepository;
+import com.dalevents.vensy.services.company.requests.AddNewVenueCommand;
 import com.dalevents.vensy.services.company.requests.CreateCompanyCommand;
 import com.dalevents.vensy.services.company.response.CreateCompanyResponse;
 import com.dalevents.vensy.services.company.response.GetCompanyResponse;
@@ -17,7 +19,7 @@ import com.dalevents.vensy.services.company.response.GetCompanyResponse;
 public class CompanyServiceImpl implements CompanyService {
 
     @Autowired
-    CompanyRepository companyRepository;
+    private CompanyRepository companyRepository;
 
     @Override
     public GetCompanyResponse getCompanyById(Long id) {
@@ -49,4 +51,19 @@ public class CompanyServiceImpl implements CompanyService {
                 newCompany.getEmail(), newCompany.getAddress());
     }
 
+    @Override
+    public void addNewVenue(AddNewVenueCommand command) {
+        if (!companyRepository.existsById(command.companyId())) {
+            throw new AppError(HttpStatus.NOT_FOUND.value(), "Company ID does not exists");
+        }
+
+        Company existingComapany = companyRepository.findById(command.companyId()).get();
+
+        var newVenue = Venue.builder().address(command.address()).capacity(command.capacity())
+                .description(command.description()).name(command.name()).build();
+
+        existingComapany.getVenue().add(newVenue);
+
+        companyRepository.save(existingComapany);
+    }
 }

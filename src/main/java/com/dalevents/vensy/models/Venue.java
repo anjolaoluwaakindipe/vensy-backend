@@ -1,5 +1,7 @@
 package com.dalevents.vensy.models;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -11,6 +13,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -18,6 +21,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Builder
 public class Venue {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -26,7 +30,11 @@ public class Venue {
     String address;
     String phoneNumber;
     int capacity;
-    List<Service> services;
+    String description;
+    @OneToMany(cascade = CascadeType.ALL)
+    @Builder.Default
+    List<Service> services = new ArrayList<>();
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    Set<Appointment> appointments;
+    @Builder.Default
+    Set<Appointment> appointments = new HashSet<>();
 }
