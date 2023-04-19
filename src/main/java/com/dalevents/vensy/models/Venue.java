@@ -33,7 +33,7 @@ public class Venue {
     String description;
     @OneToMany(cascade = CascadeType.ALL)
     @Builder.Default
-    List<Service> services = new ArrayList<>();
+    List<Specialty> services = new ArrayList<>();
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @Builder.Default
     Set<Appointment> appointments = new HashSet<>();
