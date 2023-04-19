@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Service {
+public class Specialty {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     Long id;
