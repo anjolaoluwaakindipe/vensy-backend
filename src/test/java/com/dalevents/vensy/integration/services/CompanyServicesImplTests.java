@@ -4,20 +4,19 @@ import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.util.HashSet;
 import java.util.List;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.http.HttpStatus;
-import org.springframework.test.context.junit4.SpringRunner;
-
 import com.dalevents.vensy.common.AppError;
 import com.dalevents.vensy.models.Company;
 import com.dalevents.vensy.repositories.CompanyRepository;
@@ -29,10 +28,10 @@ import com.dalevents.vensy.services.company.response.CreateCompanyResponse;
 import com.dalevents.vensy.services.company.response.GetAllVenuesReponse;
 
 @DataJpaTest
-@RunWith(SpringRunner.class)
+// @RunWith(SpringRunner.class)
 @AutoConfigureTestDatabase(replace = Replace.NONE)
 @TestInstance(Lifecycle.PER_CLASS)
-public class CompanyServicesImplTest {
+public class CompanyServicesImplTests {
     @Autowired
     private CompanyRepository companyRepository;
 
@@ -40,16 +39,21 @@ public class CompanyServicesImplTest {
 
     private Company testCompany;
 
-    @Before
-    public void setup() {
+    @BeforeAll
+    void setup() {
         companyService = new CompanyServiceImpl(companyRepository);
         testCompany = Company.builder().address("Hello").name("DalEvents").email("dalevents@gmail.com")
-                .phoneNumber("1234567890").build();
-        companyRepository.save(testCompany);
+                .phoneNumber("1234567890").venue(new HashSet<>()).build();
+        testCompany = companyRepository.save(testCompany);
+    }
+
+    @AfterAll
+    void cleanUp() {
+        companyRepository.deleteById(testCompany.getId());
     }
 
     @Test
-    public void whenGivenACompanyId_thenReturnCompany() {
+    void whenGivenACompanyId_thenReturnCompany() {
         var foundCompany = companyService.getCompanyById(testCompany.getId());
 
         assertEquals(foundCompany.id(), testCompany.getId());
@@ -58,7 +62,7 @@ public class CompanyServicesImplTest {
     }
 
     @Test
-    public void whenGiveACompanyIdThatDoesntExist_thenThrowAnAppError() {
+    void whenGiveACompanyIdThatDoesntExist_thenThrowAnAppError() {
         var exception = assertThrows(AppError.class, () -> {
             companyService.getCompanyById(3L);
         });
@@ -67,7 +71,7 @@ public class CompanyServicesImplTest {
     }
 
     @Test
-    public void whenGivenACreateCompanyCommand_thenCreateCompanyAndReturnTheCompanyAsAResponse() {
+    void whenGivenACreateCompanyCommand_thenCreateCompanyAndReturnTheCompanyAsAResponse() {
         CreateCompanyCommand command = new CreateCompanyCommand("test", "1234567890", "test4@gmail.com", "123 test st");
         CreateCompanyResponse response = companyService.createCompany(command);
         assertEquals(command.address(), response.address());
@@ -77,7 +81,7 @@ public class CompanyServicesImplTest {
     }
 
     @Test
-    public void whenGivenACreateCompanyCommandWithAnExistingEmail_thenThrowAppError() {
+    void whenGivenACreateCompanyCommandWithAnExistingEmail_thenThrowAppError() {
         CreateCompanyCommand command = new CreateCompanyCommand("test", "1234567890", "dalevents@gmail.com",
                 "123 test st");
         assertThrows(AppError.class, () -> {
@@ -86,15 +90,14 @@ public class CompanyServicesImplTest {
     }
 
     @Test
-    public void whenGivenAnAddVenueCommand_thenAddVenueToCompany() {
-        Long companyId = 1L;
+    void whenGivenAnAddVenueCommand_thenAddVenueToCompany() {
 
         AddNewVenueCommand command = new AddNewVenueCommand("test event hall", "22 test street", "12341234", 200,
                 "Near the beach");
 
-        companyService.addNewVenue(companyId, command);
+        companyService.addNewVenue(testCompany.getId(), command);
 
-        var company = companyRepository.findById(companyId);
+        var company = companyRepository.findById(testCompany.getId());
 
         assertTrue(company.isPresent());
         assertEquals(1, company.get().getVenue().size());
@@ -102,7 +105,7 @@ public class CompanyServicesImplTest {
     }
 
     @Test
-    public void whenGivenAnAddVenueCommandWithInvalidCompanyId_thenThrowAppError() {
+    void whenGivenAnAddVenueCommandWithInvalidCompanyId_thenThrowAppError() {
         Long companyId = 45L;
         AddNewVenueCommand command = new AddNewVenueCommand("test event hall", "22 test street", "12341234", 200,
                 "Near the beach");
@@ -113,12 +116,11 @@ public class CompanyServicesImplTest {
     }
 
     @Test
-    public void whenGivenACompanyId_thenReturnAllVenuesOfCompany() {
-        Long companyId = 1L;
+    void whenGivenACompanyId_thenReturnAllVenuesOfCompany() {
         AddNewVenueCommand command = new AddNewVenueCommand("test event hall", "22 test street", "12341234", 200,
                 "Near the beach");
-        companyService.addNewVenue(companyId, command);
-        List<GetAllVenuesReponse> response = companyService.getAllVenues(companyId);
+        companyService.addNewVenue(testCompany.getId(), command);
+        List<GetAllVenuesReponse> response = companyService.getAllVenues(testCompany.getId());
 
         assertEquals(1, response.size());
         assertEquals(command.name(), response.get(0).name());
@@ -129,12 +131,11 @@ public class CompanyServicesImplTest {
     }
 
     @Test
-    public void whenGivenAnInvalidCompanyId_thenReturnAllVenuesOfCompany() {
-        Long companyId = 1L;
+    void whenGivenAnInvalidCompanyId_thenReturnAllVenuesOfCompany() {
         AddNewVenueCommand command = new AddNewVenueCommand("test event hall", "22 test street", "12341234", 200,
                 "Near the beach");
-        companyService.addNewVenue(companyId, command);
-        assertThrows(AppError.class, ()->{
+        companyService.addNewVenue(testCompany.getId(), command);
+        assertThrows(AppError.class, () -> {
             companyService.getAllVenues(45L);
         });
     }
