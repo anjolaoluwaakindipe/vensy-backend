@@ -59,15 +59,15 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
-    public void addNewVenue(AddNewVenueCommand command) {
-        if (!companyRepository.existsById(command.companyId())) {
+    public void addNewVenue(Long companyId, AddNewVenueCommand command) {
+        if (!companyRepository.existsById(companyId)) {
             throw new AppError(HttpStatus.NOT_FOUND.value(), "Company ID does not exists");
         }
 
-        Company existingComapany = companyRepository.findById(command.companyId()).get();
+        Company existingComapany = companyRepository.findById(companyId).get();
 
         var newVenue = Venue.builder().address(command.address()).capacity(command.capacity())
-                .description(command.description()).name(command.name()).build();
+                .description(command.description()).name(command.name()).phoneNumber(command.phoneNumber()).build();
 
         existingComapany.getVenue().add(newVenue);
 

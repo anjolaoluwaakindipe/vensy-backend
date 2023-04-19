@@ -1,9 +1,8 @@
 package com.dalevents.vensy.mappings;
 
+import java.util.List;
+
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.factory.Mappers;
-import org.springframework.context.annotation.Bean;
 
 import com.dalevents.vensy.controllers.company.dto.*;
 import com.dalevents.vensy.services.company.requests.*;
@@ -19,4 +18,6 @@ public interface CompanyMapping {
     GetCompanyPublicInfoDto getCompanyPublicInfoResponseToDto(GetCompanyResponse response);
 
     AddNewVenueCommand addNewVenueDtoToCommand(AddNewVenueReqDto dto);
+
+    List<GetAllVenueResDto> getAllVenueResponseToDto(List<GetAllVenuesReponse> response);
 }

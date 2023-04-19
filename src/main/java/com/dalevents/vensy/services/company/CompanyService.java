@@ -11,7 +11,7 @@ import com.dalevents.vensy.services.company.response.GetCompanyResponse;
 public interface CompanyService {
     GetCompanyResponse getCompanyById(Long id);
 
-    public void addNewVenue(AddNewVenueCommand command);
+    public void addNewVenue(Long companyId, AddNewVenueCommand command);
 
     CreateCompanyResponse createCompany(CreateCompanyCommand command);
 

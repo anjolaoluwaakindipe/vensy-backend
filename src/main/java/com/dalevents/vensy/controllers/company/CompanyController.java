@@ -1,8 +1,9 @@
 package com.dalevents.vensy.controllers.company;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
@@ -15,23 +16,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.dalevents.vensy.controllers.company.dto.AddNewVenueReqDto;
 import com.dalevents.vensy.controllers.company.dto.CreateCompanyReqDto;
 import com.dalevents.vensy.controllers.company.dto.CreateCompanyResDto;
+import com.dalevents.vensy.controllers.company.dto.GetAllVenueResDto;
 import com.dalevents.vensy.controllers.company.dto.GetCompanyPublicInfoDto;
 import com.dalevents.vensy.mappings.CompanyMapping;
 import com.dalevents.vensy.services.company.CompanyService;
 import com.dalevents.vensy.services.company.requests.CreateCompanyCommand;
 
-import jakarta.validation.constraints.NotNull;
-import lombok.extern.slf4j.Slf4j;
-
 @Controller()
-@Slf4j
 @RequestMapping("/api/v1/company")
 public class CompanyController {
     @Autowired
-    CompanyService companyService;
+    private CompanyService companyService;
 
     @Autowired
-    CompanyMapping companyMapping;
+    private CompanyMapping companyMapping;
 
     @PostMapping
     ResponseEntity<CreateCompanyResDto> createACompany(@Validated @RequestBody CreateCompanyReqDto body) {
@@ -48,9 +46,16 @@ public class CompanyController {
         return new ResponseEntity<GetCompanyPublicInfoDto>(response, HttpStatus.OK);
     }
 
-    @PostMapping("/venue")
-    ResponseEntity<?> addNewVenue(@Validated AddNewVenueReqDto request) {
-        companyService.addNewVenue(companyMapping.addNewVenueDtoToCommand(request));
-        return new ResponseEntity<>(HttpStatus.OK);
+    @PostMapping("/{companyId}/venue")
+    ResponseEntity<?> addNewVenue(@PathVariable("companyId") Long companyId, @Validated AddNewVenueReqDto request) {
+        companyService.addNewVenue(companyId, companyMapping.addNewVenueDtoToCommand(request));
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @GetMapping("{companyId}/venue")
+    ResponseEntity<List<GetAllVenueResDto>> getAllVenues(@PathVariable("companyId") Long companyId) {
+        var serviceResponse = companyService.getAllVenues(companyId);
+        var response = companyMapping.getAllVenueResponseToDto(serviceResponse);
+        return new ResponseEntity<List<GetAllVenueResDto>>(response, HttpStatus.OK);
     }
 }
