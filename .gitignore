@@ -33,4 +33,4 @@ build/
 .vscode/
 
 ### DEV environments
-application.properties
+application-dev.properties
