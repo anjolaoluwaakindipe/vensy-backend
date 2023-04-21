@@ -28,7 +28,6 @@ import com.dalevents.vensy.services.company.response.CreateCompanyResponse;
 import com.dalevents.vensy.services.company.response.GetAllVenuesReponse;
 
 @DataJpaTest
-// @RunWith(SpringRunner.class)
 @AutoConfigureTestDatabase(replace = Replace.NONE)
 @TestInstance(Lifecycle.PER_CLASS)
 public class CompanyServicesImplTests {
@@ -59,6 +58,7 @@ public class CompanyServicesImplTests {
         assertEquals(foundCompany.id(), testCompany.getId());
         assertEquals(foundCompany.address(), testCompany.getAddress());
         assertEquals(foundCompany.email(), testCompany.getEmail());
+        assertEquals(foundCompany.phoneNumber(), testCompany.getPhoneNumber());
     }
 
     @Test

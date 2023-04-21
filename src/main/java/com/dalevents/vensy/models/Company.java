@@ -1,6 +1,7 @@
 package com.dalevents.vensy.models;
 
 import java.util.Set;
+import java.util.UUID;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -33,4 +34,7 @@ public class Company {
     String email;
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     Set<Venue> venue;
+    @Column(unique = true)
+    @Builder.Default
+    String key = UUID.randomUUID().toString();
 }
