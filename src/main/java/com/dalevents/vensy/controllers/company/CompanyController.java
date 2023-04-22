@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.dalevents.vensy.controllers.company.dto.AddNewVenueReqDto;
 import com.dalevents.vensy.controllers.company.dto.CreateCompanyReqDto;
@@ -22,7 +23,7 @@ import com.dalevents.vensy.mappings.CompanyMapping;
 import com.dalevents.vensy.services.company.CompanyService;
 import com.dalevents.vensy.services.company.requests.CreateCompanyCommand;
 
-@Controller()
+@RestController
 @RequestMapping("/api/v1/company")
 public class CompanyController {
     @Autowired
