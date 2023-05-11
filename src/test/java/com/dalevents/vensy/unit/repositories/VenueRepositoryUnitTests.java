@@ -1,4 +1,4 @@
-package com.dalevents.vensy.unit;
+package com.dalevents.vensy.unit.repositories;
 
 import static org.junit.Assert.assertEquals;
 

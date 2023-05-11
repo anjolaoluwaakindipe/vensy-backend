@@ -1,4 +1,4 @@
-package com.dalevents.vensy.controllers.auth.dto;
+package com.dalevents.vensy.controllers.company.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
