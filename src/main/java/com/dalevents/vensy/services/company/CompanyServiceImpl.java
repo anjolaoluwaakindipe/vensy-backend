@@ -39,7 +39,7 @@ public class CompanyServiceImpl implements CompanyService {
         Company company = companyOpt.get();
 
         return new GetCompanyResponse(company.getId(), company.getName(), company.getAddress(),
-                company.getPhoneNumber(), company.getEmail(), company.getVenue());
+                company.getPhoneNumber(), company.getEmail(), company.getVenues());
     }
 
     @Override
@@ -69,7 +69,7 @@ public class CompanyServiceImpl implements CompanyService {
         var newVenue = Venue.builder().address(command.address()).capacity(command.capacity())
                 .description(command.description()).name(command.name()).phoneNumber(command.phoneNumber()).build();
 
-        existingComapany.getVenue().add(newVenue);
+        existingComapany.getVenues().add(newVenue);
 
         companyRepository.save(existingComapany);
     }
@@ -82,7 +82,7 @@ public class CompanyServiceImpl implements CompanyService {
             throw new AppError(HttpStatus.NOT_FOUND.value(), "Company not found");
         }
 
-        return companyOpt.get().getVenue().stream().map(venue -> {
+        return companyOpt.get().getVenues().stream().map(venue -> {
             var specialtyList = new ArrayList<String>();
             for (Specialty specialty : venue.getServices()) {
                 specialtyList.add(specialty.getName());

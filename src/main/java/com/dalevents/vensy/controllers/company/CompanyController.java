@@ -14,9 +14,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.dalevents.vensy.controllers.auth.dto.CreateCompanyReqDto;
+import com.dalevents.vensy.controllers.auth.dto.CreateCompanyResDto;
 import com.dalevents.vensy.controllers.company.dto.AddNewVenueReqDto;
-import com.dalevents.vensy.controllers.company.dto.CreateCompanyReqDto;
-import com.dalevents.vensy.controllers.company.dto.CreateCompanyResDto;
 import com.dalevents.vensy.controllers.company.dto.GetAllVenueResDto;
 import com.dalevents.vensy.controllers.company.dto.GetCompanyPublicInfoDto;
 import com.dalevents.vensy.mappings.CompanyMapping;
@@ -32,13 +32,6 @@ public class CompanyController {
     @Autowired
     private CompanyMapping companyMapping;
 
-    @PostMapping
-    ResponseEntity<CreateCompanyResDto> createACompany(@Validated @RequestBody CreateCompanyReqDto body) {
-        CreateCompanyCommand params = companyMapping.createCompanyDtoToCommand(body);
-        var serviceResponse = companyService.createCompany(params);
-        var response = companyMapping.createCommpanyResponseToDto(serviceResponse);
-        return new ResponseEntity<CreateCompanyResDto>(response, HttpStatus.CREATED);
-    }
 
     @GetMapping("/{companyId}")
     ResponseEntity<GetCompanyPublicInfoDto> getCompanyPublicInfo(@PathVariable("companyId") Long id) {
