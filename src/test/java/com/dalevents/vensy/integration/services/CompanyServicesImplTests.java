@@ -139,4 +139,5 @@ public class CompanyServicesImplTests {
             companyService.getAllVenues(45L);
         });
     }
+
 }

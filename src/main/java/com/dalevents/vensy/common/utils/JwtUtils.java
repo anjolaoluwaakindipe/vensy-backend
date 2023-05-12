@@ -48,20 +48,6 @@ public class JwtUtils {
 
     }
 
-    public String generateAccessToken(UserDetails userDetails, Map<String, Object> extraClaims) {
-        // get roles from userDetails
-        List<String> roles = userDetails.getAuthorities().stream().map(authority -> authority.getAuthority()).toList();
-
-        // encode access token
-        Algorithm algorithm = Algorithm.HMAC256(this.accessTokenSecret.getBytes());
-
-        // create jwt access token
-        return JWT.create().withIssuer(tokenIssuer).withSubject(userDetails.getUsername())
-                .withExpiresAt(new Date(System.currentTimeMillis() + access_token_validity * 1000))
-                .withIssuedAt(new Date()).withClaim("roles", roles).sign(algorithm);
-
-    }
-
     public String generateRefreshToken(UserDetails userDetails) {
         // get roles from userDetails
         List<String> roles = userDetails.getAuthorities().stream().map(authority -> authority.getAuthority()).toList();
