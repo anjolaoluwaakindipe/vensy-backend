@@ -7,5 +7,6 @@ import com.dalevents.vensy.models.Company;
 
 public interface CompanyRepository extends JpaRepository<Company, Long> {
     public boolean existsByEmail(String email);
-    public Optional<Company> findByKey(String key);
+
+    public Optional<Company> findByEmail(String email);
 }

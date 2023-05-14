@@ -1,7 +1,7 @@
 package com.dalevents.vensy.models;
 
+import java.util.HashSet;
 import java.util.Set;
-import java.util.UUID;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -13,16 +13,17 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-
-
-@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Builder
+@Getter
+@Setter
+// @EqualsAndHashCode(exclude = "venues")
 public class Company {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -32,9 +33,21 @@ public class Company {
     String phoneNumber;
     @Column(unique = true)
     String email;
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    Set<Venue> venue;
-    @Column(unique = true)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true, mappedBy = "company")
     @Builder.Default
-    String key = UUID.randomUUID().toString();
+    Set<Venue> venues = new HashSet<>();
+
+    @jakarta.persistence.OneToOne(cascade = CascadeType.ALL)
+    AppUser user;
+
+    public void addVenue(Venue venue) {
+        venues.add(venue);
+        venue.setCompany(this);
+    }
+
+    public void removeVenue(Venue venue) {
+        venues.remove(venue);
+        venue.setCompany(null);
+    }
+
 }

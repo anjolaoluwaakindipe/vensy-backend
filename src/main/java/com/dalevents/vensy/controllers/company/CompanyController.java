@@ -32,7 +32,7 @@ public class CompanyController {
     @Autowired
     private CompanyMapping companyMapping;
 
-    @PostMapping
+    @PostMapping("/register")
     ResponseEntity<CreateCompanyResDto> createACompany(@Validated @RequestBody CreateCompanyReqDto body) {
         CreateCompanyCommand params = companyMapping.createCompanyDtoToCommand(body);
         var serviceResponse = companyService.createCompany(params);

@@ -42,7 +42,7 @@ public class CompanyServicesImplTests {
     void setup() {
         companyService = new CompanyServiceImpl(companyRepository);
         testCompany = Company.builder().address("Hello").name("DalEvents").email("dalevents@gmail.com")
-                .phoneNumber("1234567890").venue(new HashSet<>()).build();
+                .phoneNumber("1234567890").venues(new HashSet<>()).build();
         testCompany = companyRepository.save(testCompany);
     }
 
@@ -100,7 +100,7 @@ public class CompanyServicesImplTests {
         var company = companyRepository.findById(testCompany.getId());
 
         assertTrue(company.isPresent());
-        assertEquals(1, company.get().getVenue().size());
+        assertEquals(1, company.get().getVenues().size());
 
     }
 
@@ -139,4 +139,5 @@ public class CompanyServicesImplTests {
             companyService.getAllVenues(45L);
         });
     }
+
 }
